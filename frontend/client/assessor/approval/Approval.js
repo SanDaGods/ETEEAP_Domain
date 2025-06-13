@@ -1,6 +1,6 @@
 // JavaScript for Document Viewing and Assessor Functions
 const DOCUMENTS_BASE_PATH = "/documents/";
-const API_BASE_URL = "http://localhost:3000";
+const API_BASE_URL = "https://eteeapbackend-production.up.railway.app/frontend/api/";
 let currentPdfUrl = '';
 let currentUser = null;
 

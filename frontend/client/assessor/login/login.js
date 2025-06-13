@@ -19,7 +19,7 @@ document.getElementById("assessorLoginForm").addEventListener("submit", async (e
   submitBtn.disabled = true;
   
   try {
-    const response = await fetch("http://localhost:3000/assessor/login", {
+    const response = await fetch("https://eteeapbackend-production.up.railway.app/frontend/api//assessor/login", {
       method: "POST",
       headers: { 
         "Content-Type": "application/json",
@@ -58,7 +58,7 @@ document.getElementById("assessorLoginForm").addEventListener("submit", async (e
 document.addEventListener("DOMContentLoaded", async () => {
   if (window.location.pathname.includes("AssessorLogin")) {
     try {
-      const response = await fetch("http://localhost:3000/assessor/auth-status", {
+      const response = await fetch("https://eteeapbackend-production.up.railway.app/frontend/api//assessor/auth-status", {
         credentials: "include"
       });
       

@@ -243,7 +243,7 @@ document
     submitBtn.textContent = "Logging in...";
 
     try {
-      const response = await fetch("http://localhost:3000/api/login", {
+      const response = await fetch("https://eteeapbackend-production.up.railway.app/frontend/api//api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -286,7 +286,7 @@ loginForm.addEventListener("submit", async (event) => {
   }
 
   try {
-    const response = await fetch("http://localhost:3000/api/login", {
+    const response = await fetch("https://eteeapbackend-production.up.railway.app/frontend/api//api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),

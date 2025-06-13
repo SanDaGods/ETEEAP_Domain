@@ -258,8 +258,8 @@
     async function callBackend() {
         const backendURL = 
             window.location.hostname === "localhost" 
-            ? "http://localhost:5000" 
-            : "https://eteeapbackend-production.up.railway.app";
+            ? "https://eteeapbackend-production.up.railway.app/frontend/api/" 
+            : "https://eteeapbackend-production.up.railway.app/frontend/api/";
 
         try {
             const response = await fetch(`${backendURL}/api/test`, {

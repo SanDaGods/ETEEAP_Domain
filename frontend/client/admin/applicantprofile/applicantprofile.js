@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:3000";
+const API_BASE_URL = "https://eteeapbackend-production.up.railway.app/frontend/api/";
 let currentApplicant = null;
 let applicantId = null;
 
@@ -637,7 +637,7 @@ async function showAssignAssessorModal() {
 
 function updateStatus() {
   const status = document.getElementById("status").value;
-  fetch(`http://localhost:3000/api/progress`, {
+  fetch(`https://eteeapbackend-production.up.railway.app/frontend/api//api/progress`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ status })
