@@ -254,27 +254,29 @@
             sr.reveal(selector, options);
         });
     </script>
+  <script>
+    async function callBackend() {
+        const backendURL = 
+            window.location.hostname === "localhost" 
+            ? "http://localhost:5000" 
+            : "https://eteeapbackend-production.up.railway.app";
 
-    <!-- ✅ Add your backend API call here -->
-    <script>
-        async function callBackend() {
-            try {
-                const response = await fetch("https://eteeapbackend-production.up.railway.app/api/test", {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                });
-                const result = await response.json();
-                console.log("Backend response:", result);
-            } catch (err) {
-                console.error("Error connecting to backend:", err);
-            }
+        try {
+            const response = await fetch(`${backendURL}/api/test`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const result = await response.json();
+            console.log("Backend response:", result);
+        } catch (err) {
+            console.error("Error connecting to backend:", err);
         }
+    }
 
-        // Call backend when page loads
-        window.onload = callBackend;
-    </script>
-
+    window.onload = callBackend;
+</script>
 </body>
 </html>
