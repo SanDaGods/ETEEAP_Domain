@@ -3,12 +3,14 @@ const path = require("path");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.static("."));
+// Serve static files (HTML, CSS, JS, images)
+app.use(express.static(path.join(__dirname, ".")));
 
+// Handle all other routes (serve index.html for SPA routing)
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Frontend server running on port ${PORT}`);
 });
