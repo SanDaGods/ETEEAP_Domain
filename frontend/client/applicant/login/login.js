@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const wrapper = document.querySelector(".wrapper");
 
   if (wrapper) {
-    wrapper.classList.add("active-popup"); // Show login form immediately on page load
+    wrapper.classList.add("active-popup");
   }
 
   const buttons = {
@@ -12,12 +12,10 @@ document.addEventListener("DOMContentLoaded", () => {
     forgotLink: document.querySelector(".forgot-link"),
   };
 
-  // Save previous page URL before navigating to login
   if (document.referrer) {
     sessionStorage.setItem("previousPage", document.referrer);
   }
 
-  // Function to reset input fields
   const resetInputs = () => {
     wrapper?.querySelectorAll("input").forEach((input) => {
       if (input.type === "checkbox") {
@@ -28,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
-  // Function to show different forms
   const showForm = (formType = "") => {
     wrapper?.classList.remove(
       "active",
@@ -40,50 +37,40 @@ document.addEventListener("DOMContentLoaded", () => {
     resetInputs();
   };
 
-  // Switch to Register Form
   buttons.registerLink?.addEventListener("click", (e) => {
     e.preventDefault();
-    showForm("active"); // Show Register Form
+    showForm("active");
   });
 
-  // Switch back to Login Form
   buttons.loginLink?.addEventListener("click", (e) => {
     e.preventDefault();
-    showForm(""); // Show Login Form
+    showForm("");
   });
 
-  // Show Forgot Password Form
   buttons.forgotLink?.addEventListener("click", (e) => {
     e.preventDefault();
-    showForm("active-forgot"); // Show Forgot Password Form
+    showForm("active-forgot");
   });
 
-  // Handle Reset Password Form Submission
   const resetForm = document.getElementById("resetForm");
   const verificationForm = document.getElementById("verificationForm");
   const newPasswordForm = document.getElementById("newPasswordForm");
 
   resetForm?.addEventListener("submit", (e) => {
     e.preventDefault();
-
-    // Hide Forgot Password Form & Show Verification Form
     document.querySelector(".form-box.forgot").style.display = "none";
     verificationForm.style.display = "block";
     wrapper.classList.add("active-verification");
   });
 
-  // Handle Verification Code Submission
   const verifyCodeForm = document.getElementById("verifyCodeForm");
   verifyCodeForm?.addEventListener("submit", (e) => {
     e.preventDefault();
-
-    // Hide Verification Form & Show New Password Form
     verificationForm.style.display = "none";
     newPasswordForm.style.display = "block";
     wrapper.classList.add("active-new-password");
   });
 
-  // Handle New Password Submission
   const newPasswordSubmit = document.getElementById("newPasswordSubmit");
   newPasswordSubmit?.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -96,10 +83,8 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    showNotification(
-      "Password successfully reset! Redirecting to login page..."
-    );
-    showForm(""); // Redirect to login form
+    showNotification("Password successfully reset! Redirecting to login page...");
+    showForm("");
   });
 
   document.querySelectorAll(".toggle-password").forEach((toggle) => {
@@ -117,15 +102,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Handle Terms & Conditions
-  document
-    .getElementById("terms-link")
-    .addEventListener("click", function (event) {
-      event.preventDefault();
-      document.getElementById("terms-con").style.display = "block";
-    });
+  document.getElementById("terms-link")?.addEventListener("click", function (event) {
+    event.preventDefault();
+    document.getElementById("terms-con").style.display = "block";
+  });
 
-  document.getElementById("accept-btn").addEventListener("click", function () {
+  document.getElementById("accept-btn")?.addEventListener("click", function () {
     document.getElementById("terms-con").style.display = "none";
     document.getElementById("terms-checkbox").checked = true;
   });
@@ -145,130 +127,130 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const BACKEND_URL = "https://eteeapbackend-production.up.railway.app";
 
-// Registration Form Submission
-document
-  .getElementById("registerForm")
-  ?.addEventListener("submit", async (event) => {
-    event.preventDefault();
+// Registration
+document.getElementById("registerForm")?.addEventListener("submit", async (event) => {
+  event.preventDefault();
 
-    const email = document
-      .getElementById("regEmail")
-      .value.trim()
-      .toLowerCase();
-    const password = document.getElementById("regPassword").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
+  const email = document.getElementById("regEmail").value.trim().toLowerCase();
+  const password = document.getElementById("regPassword").value;
+  const confirmPassword = document.getElementById("confirmPassword").value;
 
-    if (!email || !password || !confirmPassword) {
-      showNotification("Please fill in all fields");
-      return;
-    }
+  if (!email || !password || !confirmPassword) {
+    showNotification("Please fill in all fields");
+    return;
+  }
 
-    if (!email.includes("@") || !email.includes(".")) {
-      showNotification(
-        "Please enter a valid email address (e.g., user@example.com)"
-      );
-      return;
-    }
+  if (!email.includes("@") || !email.includes(".")) {
+    showNotification("Please enter a valid email address (e.g., user@example.com)");
+    return;
+  }
 
-    if (password !== confirmPassword) {
-      showNotification("Passwords do not match!");
-      return;
-    }
+  if (password !== confirmPassword) {
+    showNotification("Passwords do not match!");
+    return;
+  }
 
-    if (password.length < 8) {
-      showNotification("Password must be at least 8 characters");
-      return;
-    }
+  if (password.length < 8) {
+    showNotification("Password must be at least 8 characters");
+    return;
+  }
 
-    const submitBtn = event.target.querySelector('button[type="submit"]');
-    const originalBtnText = submitBtn.textContent;
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Registering...";
+  const submitBtn = event.target.querySelector('button[type="submit"]');
+  const originalBtnText = submitBtn.textContent;
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Registering...";
 
-    try {
-      const response = await fetch(`${BACKEND_URL}/api/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+  try {
+    const response = await fetch(`${BACKEND_URL}/api/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
 
-      const data = await response.json();
+    const contentType = response.headers.get("content-type");
 
-      if (!response.ok) {
-        const errorMessage =
-          data.details || data.error || "Registration failed";
-        throw new Error(errorMessage);
-      }
-
-      showNotification(
-        "Registration successful! Please fill out your personal information."
-      );
-      localStorage.setItem("userId", data.data.userId);
-      localStorage.setItem("applicantId", data.data.applicantId);
-      window.location.href = "/client/applicant/info/information.html";
-    } catch (error) {
-      console.error("Registration error:", error);
-      showNotification(`Registration failed: ${error.message}`);
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = originalBtnText;
-    }
-  });
-
-// Login Form Submission
-document
-  .getElementById("loginForm")
-  ?.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    const email = document.getElementById("loginEmail").value;
-    const password = document.getElementById("loginPassword").value;
-
-    if (!email || !password) {
-      showNotification("Please enter both email and password.");
-      return;
-    }
-
-    const submitBtn = event.target.querySelector('button[type="submit"]');
-    const originalBtnText = submitBtn.textContent;
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Logging in...";
-
-    try {
-      const response = await fetch(`${BACKEND_URL}/api/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email.trim().toLowerCase(),
-          password: password,
-        }),
-        credentials: "include",
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        showNotification("Login successful!");
-        localStorage.setItem("userId", data.data.userId);
-        localStorage.setItem("userEmail", data.data.email);
-        window.location.href = "../Timeline/timeline.html";
+    if (!response.ok) {
+      const errorText = await response.text();
+      if (contentType && contentType.includes("application/json")) {
+        const data = JSON.parse(errorText);
+        throw new Error(data.error || "Registration failed");
       } else {
-        throw new Error(data.error || "Login failed");
+        throw new Error(`Registration failed: ${errorText}`);
       }
-    } catch (error) {
-      console.error("Login error:", error);
-      showNotification(`Login failed: ${error.message}`);
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = originalBtnText;
     }
-  });
+
+    const data = await response.json();
+    showNotification("Registration successful! Please fill out your personal information.");
+    localStorage.setItem("userId", data.data.userId);
+    localStorage.setItem("applicantId", data.data.applicantId);
+    window.location.href = "/client/applicant/info/information.html";
+  } catch (error) {
+    console.error("Registration error:", error);
+    showNotification(`Registration failed: ${error.message}`);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalBtnText;
+  }
+});
+
+// Login
+document.getElementById("loginForm")?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+  const password = document.getElementById("loginPassword").value;
+
+  if (!email || !password) {
+    showNotification("Please enter both email and password.");
+    return;
+  }
+
+  const submitBtn = event.target.querySelector('button[type="submit"]');
+  const originalBtnText = submitBtn.textContent;
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Logging in...";
+
+  try {
+    const response = await fetch(`${BACKEND_URL}/api/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+      credentials: "include",
+    });
+
+    const contentType = response.headers.get("content-type");
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      if (contentType && contentType.includes("application/json")) {
+        const data = JSON.parse(errorText);
+        throw new Error(data.error || "Login failed");
+      } else {
+        throw new Error("Login failed: Unexpected server response.");
+      }
+    }
+
+    if (contentType && contentType.includes("application/json")) {
+      const data = await response.json();
+      showNotification("Login successful!");
+      localStorage.setItem("userId", data.data.userId);
+      localStorage.setItem("userEmail", data.data.email);
+      window.location.href = "../Timeline/timeline.html";
+    } else {
+      throw new Error("Unexpected server response. Please try again later.");
+    }
+  } catch (error) {
+    console.error("Login error:", error);
+    showNotification(`Login failed: ${error.message}`);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalBtnText;
+  }
+});
 
 function showNotification(message, type = "info") {
   const existingNotifications = document.querySelectorAll(".notification");
-  existingNotifications.forEach((notification) => notification.remove());
+  existingNotifications.forEach((n) => n.remove());
 
   const notification = document.createElement("div");
   notification.className = `notification ${type}`;
