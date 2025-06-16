@@ -104,16 +104,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.querySelectorAll(".toggle-password").forEach((toggle) => {
     toggle.addEventListener("click", () => {
-      const input = toggle.parentElement.querySelector("input"); // Get correct input field
-      const icon = toggle.querySelector("ion-icon"); // Get the ion-icon
+      const input = toggle.parentElement.querySelector("input");
+      const icon = toggle.querySelector("ion-icon");
 
-      // Toggle password visibility
       if (input.type === "password") {
         input.type = "text";
-        icon.setAttribute("name", "eye"); // Change icon to open eye
+        icon.setAttribute("name", "eye");
       } else {
         input.type = "password";
-        icon.setAttribute("name", "eye-off"); // Change icon back to closed eye
+        icon.setAttribute("name", "eye-off");
       }
     });
   });
@@ -122,17 +121,15 @@ document.addEventListener("DOMContentLoaded", () => {
   document
     .getElementById("terms-link")
     .addEventListener("click", function (event) {
-      event.preventDefault(); // Prevent default link behavior
-      document.getElementById("terms-con").style.display = "block"; // Show terms
+      event.preventDefault();
+      document.getElementById("terms-con").style.display = "block";
     });
 
-  // Close terms when clicking the "Accept" button and check the checkbox
   document.getElementById("accept-btn").addEventListener("click", function () {
-    document.getElementById("terms-con").style.display = "none"; // Hide terms
-    document.getElementById("terms-checkbox").checked = true; // Check the checkbox
+    document.getElementById("terms-con").style.display = "none";
+    document.getElementById("terms-checkbox").checked = true;
   });
 
-  // Close button handling: Return to previous page
   buttons.close?.addEventListener("click", () => {
     resetInputs();
     wrapper?.classList.remove(
@@ -142,10 +139,11 @@ document.addEventListener("DOMContentLoaded", () => {
       "active-verification",
       "active-new-password"
     );
-
     window.location.href = "../Home/index.html";
   });
 });
+
+const BACKEND_URL = "https://eteeapbackend-production.up.railway.app";
 
 // Registration Form Submission
 document
@@ -160,13 +158,11 @@ document
     const password = document.getElementById("regPassword").value;
     const confirmPassword = document.getElementById("confirmPassword").value;
 
-    // Client-side validation
     if (!email || !password || !confirmPassword) {
       showNotification("Please fill in all fields");
       return;
     }
 
-    // Simple client-side email validation
     if (!email.includes("@") || !email.includes(".")) {
       showNotification(
         "Please enter a valid email address (e.g., user@example.com)"
@@ -190,15 +186,13 @@ document
     submitBtn.textContent = "Registering...";
 
     try {
-      console.log("Attempting to register:", email);
-      const response = await fetch("/api/register", {
+      const response = await fetch(`${BACKEND_URL}/api/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
       const data = await response.json();
-      console.log("Registration response:", data);
 
       if (!response.ok) {
         const errorMessage =
@@ -221,13 +215,12 @@ document
     }
   });
 
-// Login Form Submission (single handler)
+// Login Form Submission
 document
   .getElementById("loginForm")
   ?.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    // Get form values
     const email = document.getElementById("loginEmail").value;
     const password = document.getElementById("loginPassword").value;
 
@@ -236,14 +229,13 @@ document
       return;
     }
 
-    // Show loading state
     const submitBtn = event.target.querySelector('button[type="submit"]');
     const originalBtnText = submitBtn.textContent;
     submitBtn.disabled = true;
     submitBtn.textContent = "Logging in...";
 
     try {
-      const response = await fetch("https://eteeapbackend-production.up.railway.app/frontend/api//api/login", {
+      const response = await fetch(`${BACKEND_URL}/api/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -252,7 +244,7 @@ document
           email: email.trim().toLowerCase(),
           password: password,
         }),
-        credentials: "include", // Important for cookies
+        credentials: "include",
       });
 
       const data = await response.json();
@@ -269,44 +261,10 @@ document
       console.error("Login error:", error);
       showNotification(`Login failed: ${error.message}`);
     } finally {
-      // Reset button state
       submitBtn.disabled = false;
       submitBtn.textContent = originalBtnText;
     }
   });
-
-loginForm.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  const email = document.getElementById("loginEmail").value;
-  const password = document.getElementById("loginPassword").value;
-
-  if (!email || !password) {
-    showNotification("Please enter both email and password.");
-    return;
-  }
-
-  try {
-    const response = await fetch("https://eteeapbackend-production.up.railway.app/frontend/api//api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      showNotification("Login successful!");
-      localStorage.setItem("authToken", data.data.userId); // Note the nested structure
-      localStorage.setItem("userId", data.data.userId);
-      window.location.href = "../Timeline/timeline.html";
-    } else {
-      showNotification("Login failed: " + data.message);
-    }
-  } catch (error) {
-    console.error("Error:", error);
-    showNotification("An error occurred. Please try again.");
-  }
-});
 
 function showNotification(message, type = "info") {
   const existingNotifications = document.querySelectorAll(".notification");
