@@ -161,7 +161,7 @@ document.getElementById("registerForm")?.addEventListener("submit", async (event
   submitBtn.textContent = "Registering...";
 
   try {
-    const response = await fetch(${BACKEND_URL}/api/register, {
+    const response = await fetch(`${BACKEND_URL}/api/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
@@ -211,7 +211,7 @@ document.getElementById("loginForm")?.addEventListener("submit", async (event) =
   submitBtn.textContent = "Logging in...";
 
   try {
-    const response = await fetch(${BACKEND_URL}/api/login, {
+    const response = await fetch(`${BACKEND_URL}/api/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
