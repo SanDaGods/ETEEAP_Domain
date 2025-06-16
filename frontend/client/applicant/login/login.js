@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
       "active-verification",
       "active-new-password"
     );
-    window.location.href = "../Home/index.html";
+    window.location.href = "../index.html";
   });
 });
 
@@ -183,7 +183,7 @@ document.getElementById("registerForm")?.addEventListener("submit", async (event
     showNotification("Registration successful! Please fill out your personal information.");
     localStorage.setItem("userId", data.data.userId);
     localStorage.setItem("applicantId", data.data.applicantId);
-    window.location.href = "/client/applicant/info/information.html";
+    window.location.href = "https://eteeap-domain-uluo.vercel.app/frontend/client/applicant/info/information.html";
   } catch (error) {
     console.error("Registration error:", error);
     showNotification(`Registration failed: ${error.message}`);
