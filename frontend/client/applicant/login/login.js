@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
       "active-verification",
       "active-new-password"
     );
-    window.location.href = "../Home/index.html";
+    window.location.href = "/client/applicant/login/login.html";
   });
 });
 
