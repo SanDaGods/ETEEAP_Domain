@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
       "active-verification",
       "active-new-password"
     );
-    window.location.href = "/index.html";
+    window.location.href = "../Home/index.html";
   });
 });
 
@@ -175,7 +175,7 @@ document.getElementById("registerForm")?.addEventListener("submit", async (event
         const data = JSON.parse(errorText);
         throw new Error(data.error || "Registration failed");
       } else {
-        throw new Error(Registration failed: ${errorText});
+        throw new Error(`Registration failed: ${errorText}`);
       }
     }
 
@@ -183,10 +183,10 @@ document.getElementById("registerForm")?.addEventListener("submit", async (event
     showNotification("Registration successful! Please fill out your personal information.");
     localStorage.setItem("userId", data.data.userId);
     localStorage.setItem("applicantId", data.data.applicantId);
-    window.location.href = "https://eteeap-domain-uluo.vercel.app/frontend/client/applicant/info/information.html";
+    window.location.href = "/client/applicant/info/information.html";
   } catch (error) {
     console.error("Registration error:", error);
-    showNotification(Registration failed: ${error.message});
+    showNotification(`Registration failed: ${error.message}`);
   } finally {
     submitBtn.disabled = false;
     submitBtn.textContent = originalBtnText;
@@ -241,7 +241,7 @@ document.getElementById("loginForm")?.addEventListener("submit", async (event) =
     }
   } catch (error) {
     console.error("Login error:", error);
-    showNotification(Login failed: ${error.message});
+    showNotification(`Login failed: ${error.message}`);
   } finally {
     submitBtn.disabled = false;
     submitBtn.textContent = originalBtnText;
@@ -253,7 +253,7 @@ function showNotification(message, type = "info") {
   existingNotifications.forEach((n) => n.remove());
 
   const notification = document.createElement("div");
-  notification.className = notification ${type};
+  notification.className = `notification ${type}`;
   notification.textContent = message;
   document.body.appendChild(notification);
 
