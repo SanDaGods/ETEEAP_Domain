@@ -161,7 +161,7 @@ document.getElementById("registerForm")?.addEventListener("submit", async (event
   submitBtn.textContent = "Registering...";
 
   try {
-    const response = await fetch(`${BACKEND_URL}/api/register`, {
+    const response = await fetch(${BACKEND_URL}/api/register, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
@@ -175,7 +175,7 @@ document.getElementById("registerForm")?.addEventListener("submit", async (event
         const data = JSON.parse(errorText);
         throw new Error(data.error || "Registration failed");
       } else {
-        throw new Error(`Registration failed: ${errorText}`);
+        throw new Error(Registration failed: ${errorText});
       }
     }
 
@@ -186,7 +186,7 @@ document.getElementById("registerForm")?.addEventListener("submit", async (event
     window.location.href = "https://eteeap-domain-uluo.vercel.app/frontend/client/applicant/info/information.html";
   } catch (error) {
     console.error("Registration error:", error);
-    showNotification(`Registration failed: ${error.message}`);
+    showNotification(Registration failed: ${error.message});
   } finally {
     submitBtn.disabled = false;
     submitBtn.textContent = originalBtnText;
@@ -211,7 +211,7 @@ document.getElementById("loginForm")?.addEventListener("submit", async (event) =
   submitBtn.textContent = "Logging in...";
 
   try {
-    const response = await fetch(`${BACKEND_URL}/api/login`, {
+    const response = await fetch(${BACKEND_URL}/api/login, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
@@ -241,7 +241,7 @@ document.getElementById("loginForm")?.addEventListener("submit", async (event) =
     }
   } catch (error) {
     console.error("Login error:", error);
-    showNotification(`Login failed: ${error.message}`);
+    showNotification(Login failed: ${error.message});
   } finally {
     submitBtn.disabled = false;
     submitBtn.textContent = originalBtnText;
@@ -253,7 +253,7 @@ function showNotification(message, type = "info") {
   existingNotifications.forEach((n) => n.remove());
 
   const notification = document.createElement("div");
-  notification.className = `notification ${type}`;
+  notification.className = notification ${type};
   notification.textContent = message;
   document.body.appendChild(notification);
 
