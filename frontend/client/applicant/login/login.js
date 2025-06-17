@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
       "active-verification",
       "active-new-password"
     );
-    window.location.href = "../index.html";
+    window.location.href = "https://eteeap-domain-uluo.vercel.app/index.html";
   });
 });
 
