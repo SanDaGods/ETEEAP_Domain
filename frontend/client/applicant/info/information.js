@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!userId) {
         showAlert("Session expired. Please login again.", "error");
         setTimeout(() => {
-          window.location.href = "/frontend/client/applicant/Login/login.html";
+          window.location.href = "frontend/client/applicant/Login/login.html";
         }, 2000);
         return;
       }
@@ -189,7 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         showAlert("Information submitted successfully!", "success");
         setTimeout(() => {
-          window.location.href = "/frontend/client/applicant/info/filesubmission.html";
+          window.location.href = "frontend/client/applicant/info/filesubmission.html";
         }, 1500);
       } catch (error) {
         console.error("Submission error:", error);
