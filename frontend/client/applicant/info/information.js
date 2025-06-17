@@ -156,7 +156,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // REDIRECT TO FILESUBMISSION
         setTimeout(() => {
-          window.location.href = "filesubmission.html";
+          window.location.href = "/frontend/client/applicant/info/filesubmission.html";
         }, 1500);
       } catch (error) {
         console.error("Submission error:", error);
