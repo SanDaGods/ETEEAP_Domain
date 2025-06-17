@@ -155,9 +155,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         showAlert("Information submitted successfully!", "success");
 
-        // Redirect to filesubmission.html in same directory
+        // ✅ Redirect to filesubmission.html in same directory
         setTimeout(() => {
-          window.location.href = "https://eteeap-domain-new.vercel.app/frontend/client/applicant/info/filesubmission.html";
+          window.location.href = "filesubmission.html";
         }, 1500);
       } catch (error) {
         console.error("Submission error:", error);
