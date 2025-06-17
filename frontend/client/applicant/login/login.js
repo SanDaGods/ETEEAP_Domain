@@ -230,7 +230,7 @@ document.getElementById("loginForm")?.addEventListener("submit", async (event) =
     showNotification("Login successful!");
     localStorage.setItem("userId", responseBody.data.userId);
     localStorage.setItem("userEmail", responseBody.data.email);
-    window.location.href = "../Timeline/timeline.html";
+    window.location.href = "https://eteeap-domain-new.vercel.app/frontend/client/applicant/timeline/timeline.html";
   } catch (error) {
     console.error("Login error:", error);
     showNotification(error.message || "Login failed. Please try again.");
