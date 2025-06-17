@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
 
     const newPassword = document.getElementById("newPassword").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
+    const confirmPassword = document.getElementById("newConfirmPassword").value;
 
     if (newPassword !== confirmPassword) {
       showNotification("Passwords do not match. Please try again.");
@@ -133,7 +133,7 @@ document.getElementById("registerForm")?.addEventListener("submit", async (event
 
   const email = document.getElementById("regEmail").value.trim().toLowerCase();
   const password = document.getElementById("regPassword").value;
-  const confirmPassword = document.getElementById("confirmPassword").value;
+  const confirmPassword = document.getElementById("regConfirmPassword").value;
 
   if (!email || !password || !confirmPassword) {
     showNotification("Please fill in all fields");
@@ -168,21 +168,19 @@ document.getElementById("registerForm")?.addEventListener("submit", async (event
     });
 
     const contentType = response.headers.get("content-type");
+    const isJson = contentType && contentType.includes("application/json");
+    const responseBody = isJson ? await response.json() : await response.text();
 
     if (!response.ok) {
-      const errorText = await response.text();
-      if (contentType && contentType.includes("application/json")) {
-        const data = JSON.parse(errorText);
-        throw new Error(data.error || "Registration failed");
-      } else {
-        throw new Error(`Registration failed: ${errorText}`);
-      }
+      const errorMessage = isJson
+        ? responseBody?.error || "Registration failed"
+        : `Registration failed: ${responseBody}`;
+      throw new Error(errorMessage);
     }
 
-    const data = await response.json();
     showNotification("Registration successful! Please fill out your personal information.");
-    localStorage.setItem("userId", data.data.userId);
-    localStorage.setItem("applicantId", data.data.applicantId);
+    localStorage.setItem("userId", responseBody.data.userId);
+    localStorage.setItem("applicantId", responseBody.data.applicantId);
     window.location.href = "https://eteeap-domain-uluo.vercel.app/frontend/client/applicant/info/information.html";
   } catch (error) {
     console.error("Registration error:", error);
@@ -218,30 +216,24 @@ document.getElementById("loginForm")?.addEventListener("submit", async (event) =
       credentials: "include",
     });
 
-    const contentType = response.headers.get("content-type");
+    const contentType = response.headers.get("content-type") || "";
+    const isJson = contentType.includes("application/json");
+    const responseBody = isJson ? await response.json() : await response.text();
 
     if (!response.ok) {
-      const errorText = await response.text();
-      if (contentType && contentType.includes("application/json")) {
-        const data = JSON.parse(errorText);
-        throw new Error(data.error || "Login failed");
-      } else {
-        throw new Error("Login failed: Unexpected server response.");
-      }
+      const errorMessage = isJson
+        ? responseBody?.error || "Login failed"
+        : `Login failed: ${responseBody}`;
+      throw new Error(errorMessage);
     }
 
-    if (contentType && contentType.includes("application/json")) {
-      const data = await response.json();
-      showNotification("Login successful!");
-      localStorage.setItem("userId", data.data.userId);
-      localStorage.setItem("userEmail", data.data.email);
-      window.location.href = "../Timeline/timeline.html";
-    } else {
-      throw new Error("Unexpected server response. Please try again later.");
-    }
+    showNotification("Login successful!");
+    localStorage.setItem("userId", responseBody.data.userId);
+    localStorage.setItem("userEmail", responseBody.data.email);
+    window.location.href = "../Timeline/timeline.html";
   } catch (error) {
     console.error("Login error:", error);
-    showNotification(`Login failed: ${error.message}`);
+    showNotification(error.message || "Login failed. Please try again.");
   } finally {
     submitBtn.disabled = false;
     submitBtn.textContent = originalBtnText;
