@@ -1,5 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Show alert message
+  const BACKEND_URL =
+    import.meta.env.VITE_BACKEND_URL ||
+    "https://eteeapbackend-production.up.railway.app";
+
   function showAlert(message, type = "info") {
     const alertBox = document.createElement("div");
     alertBox.className = `alert ${type}`;
@@ -13,23 +16,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 3000);
   }
 
-  // Course selection dropdown logic
   function updateDropdowns() {
     let selectedValues = new Set();
 
-    // Get selected values from all dropdowns
     document.querySelectorAll("select").forEach((select) => {
       if (select.value) {
         selectedValues.add(select.value);
       }
     });
 
-    // Enable all options first
     document.querySelectorAll("select option").forEach((option) => {
       option.hidden = false;
     });
 
-    // Disable already selected options in other dropdowns
     document.querySelectorAll("select").forEach((select) => {
       let selected = select.value;
       select.querySelectorAll("option").forEach((option) => {
@@ -40,12 +39,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Initialize dropdown change listeners
   document.querySelectorAll("select").forEach((select) => {
     select.addEventListener("change", updateDropdowns);
   });
 
-  // Initialize International Telephone Input
   const phoneInput = document.querySelector("#mobile-number");
   if (phoneInput) {
     const iti = window.intlTelInput(phoneInput, {
@@ -69,7 +66,6 @@ document.addEventListener("DOMContentLoaded", () => {
       },
     });
 
-    // Add validation on blur
     phoneInput.addEventListener("blur", function () {
       if (phoneInput.value.trim()) {
         if (!iti.isValidNumber()) {
@@ -82,13 +78,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Form submission handler
   const personalForm = document.getElementById("personalForm");
   if (personalForm) {
     personalForm.addEventListener("submit", async (event) => {
       event.preventDefault();
 
-      // Validate required fields
       const requiredFields = [
         "firstname",
         "lastname",
@@ -134,7 +128,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // Prepare personal info data
       const personalInfo = {
         firstname: document.getElementById("firstname").value.trim(),
         middlename: document.getElementById("middlename").value.trim(),
@@ -163,32 +156,37 @@ document.addEventListener("DOMContentLoaded", () => {
       };
 
       try {
-        // Update UI for submission
         const submitButton = personalForm.querySelector(
           'button[type="submit"]'
         );
         submitButton.disabled = true;
         submitButton.innerHTML = '<span class="spinner"></span> Next Page';
 
-        // Send data to server
-        const response = await fetch("/api/update-personal-info", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            userId: userId,
-            personalInfo: personalInfo,
-          }),
-        });
+        const response = await fetch(
+          `${BACKEND_URL}/api/update-personal-info`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              userId: userId,
+              personalInfo: personalInfo,
+            }),
+          }
+        );
 
-        const data = await response.json();
+        const contentType = response.headers.get("content-type");
+        const isJson = contentType && contentType.includes("application/json");
+        const data = isJson ? await response.json() : await response.text();
 
         if (!response.ok) {
-          throw new Error(data.error || "Failed to update information");
+          const errorMessage = isJson
+            ? data?.error || "Submission failed"
+            : `Submission failed: ${data}`;
+          throw new Error(errorMessage);
         }
 
-        // Show success and redirect
         showAlert("Information submitted successfully!", "success");
         setTimeout(() => {
           window.location.href = "filesubmission.html";
@@ -208,7 +206,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Input validation styling
   const requiredFields = [
     "firstname",
     "lastname",
@@ -240,13 +237,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Date picker initialization
   const birthDateInput = document.getElementById("birth-date");
   if (birthDateInput) {
     birthDateInput.max = new Date().toISOString().split("T")[0];
   }
 
-  // Age auto-calculation from birth date
   const ageInput = document.getElementById("age");
   if (birthDateInput && ageInput) {
     birthDateInput.addEventListener("change", function () {
@@ -261,7 +256,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// CSS for dynamic elements (can be moved to stylesheet)
+// CSS for alert + spinner (can be moved to external .css)
 const dynamicStyles = `
     .alert {
         position: fixed;
@@ -308,8 +303,6 @@ const dynamicStyles = `
         border-color: #ff4444 !important;
     }
 `;
-
-// Add styles to the document
 const styleElement = document.createElement("style");
 styleElement.textContent = dynamicStyles;
 document.head.appendChild(styleElement);
