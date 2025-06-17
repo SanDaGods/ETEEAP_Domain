@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const BACKEND_URL =
-    import.meta.env.VITE_BACKEND_URL ||
-    "https://eteeapbackend-production.up.railway.app";
+    import.meta.env.VITE_BACKEND_URL || "https://eteeapbackend-production.up.railway.app";
 
   function showAlert(message, type = "info") {
     const alertBox = document.createElement("div");
@@ -17,15 +16,17 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function updateDropdowns() {
-    let selectedValues = new Set();
+    const selectedValues = new Set();
     document.querySelectorAll("select").forEach((select) => {
       if (select.value) selectedValues.add(select.value);
     });
+
     document.querySelectorAll("select option").forEach((option) => {
       option.hidden = false;
     });
+
     document.querySelectorAll("select").forEach((select) => {
-      let selected = select.value;
+      const selected = select.value;
       select.querySelectorAll("option").forEach((option) => {
         if (selectedValues.has(option.value) && option.value !== selected) {
           option.hidden = true;
@@ -56,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
       customPlaceholder: (placeholder) => "e.g. " + placeholder,
     });
 
-    phoneInput.addEventListener("blur", function () {
+    phoneInput.addEventListener("blur", () => {
       if (phoneInput.value.trim()) {
         if (!iti.isValidNumber()) {
           phoneInput.classList.add("error");
@@ -84,10 +85,10 @@ document.addEventListener("DOMContentLoaded", () => {
       requiredFields.forEach((fieldId) => {
         const field = document.getElementById(fieldId);
         if (!field || !field.value.trim()) {
-          if (field) field.classList.add("error");
+          field?.classList.add("error");
           isValid = false;
         } else {
-          field.classList.remove("error");
+          field?.classList.remove("error");
         }
       });
 
@@ -130,11 +131,11 @@ document.addEventListener("DOMContentLoaded", () => {
         thirdPriorityCourse: document.getElementById("third-prio").value,
       };
 
-      try {
-        const submitButton = personalForm.querySelector('button[type="submit"]');
-        submitButton.disabled = true;
-        submitButton.innerHTML = '<span class="spinner"></span> Next Page';
+      const submitButton = personalForm.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      submitButton.innerHTML = '<span class="spinner"></span> Next Page';
 
+      try {
         const response = await fetch(`${BACKEND_URL}/api/update-personal-info`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -145,7 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const isJson = contentType && contentType.includes("application/json");
         const data = isJson ? await response.json() : await response.text();
 
-        if (!response.ok) {
+        if (!response.ok || (isJson && !data.success)) {
           const errorMessage = isJson
             ? data?.error || "Submission failed"
             : `Submission failed: ${data}`;
@@ -154,19 +155,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
         showAlert("Information submitted successfully!", "success");
 
-        // REDIRECT TO FILESUBMISSION
+        // Redirect to filesubmission.html in same directory
         setTimeout(() => {
-         window.location.href = "../info/filesubmission.html";
+          window.location.href = "filesubmission.html";
         }, 1500);
       } catch (error) {
         console.error("Submission error:", error);
         showAlert(`Error: ${error.message}`, "error");
       } finally {
-        const submitButton = personalForm.querySelector('button[type="submit"]');
-        if (submitButton) {
-          submitButton.disabled = false;
-          submitButton.textContent = "Next Page";
-        }
+        submitButton.disabled = false;
+        submitButton.textContent = "Next Page";
       }
     });
   }
@@ -180,13 +178,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   requiredFields.forEach((fieldId) => {
     const field = document.getElementById(fieldId);
-    if (field) {
-      field.addEventListener("input", () => {
-        if (field.value.trim()) {
-          field.classList.remove("error");
-        }
-      });
-    }
+    field?.addEventListener("input", () => {
+      if (field.value.trim()) {
+        field.classList.remove("error");
+      }
+    });
   });
 
   const birthDateInput = document.getElementById("birth-date");
@@ -209,7 +205,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// CSS for alert + spinner (can be moved to external .css)
+// CSS injection
 const dynamicStyles = `
   .alert {
       position: fixed;
@@ -243,7 +239,6 @@ const dynamicStyles = `
   }
   .error { border-color: #ff4444 !important; }
 `;
-
 const styleElement = document.createElement("style");
 styleElement.textContent = dynamicStyles;
 document.head.appendChild(styleElement);
