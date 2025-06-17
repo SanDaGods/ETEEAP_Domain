@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "https://eteeap-domain-new.vercel.app/index.html";
   });
 
-  const BACKEND_URL = "https://eteeapbackend-production.up.railway.app";
+  const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL;
 
   // Registration
   document.getElementById("registerForm")?.addEventListener("submit", async (event) => {
