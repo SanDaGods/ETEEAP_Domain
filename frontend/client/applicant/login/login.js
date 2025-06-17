@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "https://eteeap-domain-new.vercel.app/index.html";
   });
 
-  const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL;
+  const BACKEND_URL = "https://eteeapbackend-production.up.railway.app";
 
   // Registration
   document.getElementById("registerForm")?.addEventListener("submit", async (event) => {
@@ -161,7 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
     submitBtn.textContent = "Registering...";
 
     try {
-      const response = await fetch(`${BACKEND_URL}/api/register`, {
+      const response = await fetch(${BACKEND_URL}/api/register, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -174,7 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!response.ok) {
         const errorMessage = isJson
           ? responseBody?.error || "Registration failed"
-          : `Registration failed: ${responseBody}`;
+          : Registration failed: ${responseBody};
         throw new Error(errorMessage);
       }
 
@@ -184,7 +184,7 @@ document.addEventListener("DOMContentLoaded", () => {
       window.location.href = "https://eteeap-domain-new.vercel.app/frontend/client/applicant/info/information.html";
     } catch (error) {
       console.error("Registration error:", error);
-      showNotification(`Registration failed: ${error.message}`);
+      showNotification(Registration failed: ${error.message});
     } finally {
       submitBtn.disabled = false;
       submitBtn.textContent = originalBtnText;
@@ -209,7 +209,7 @@ document.addEventListener("DOMContentLoaded", () => {
     submitBtn.textContent = "Logging in...";
 
     try {
-      const response = await fetch(`${BACKEND_URL}/api/login`, {
+      const response = await fetch(${BACKEND_URL}/api/login, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -223,7 +223,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!response.ok) {
         const errorMessage = isJson
           ? responseBody?.error || "Login failed"
-          : `Login failed: ${responseBody}`;
+          : Login failed: ${responseBody};
         throw new Error(errorMessage);
       }
 
@@ -246,7 +246,7 @@ function showNotification(message, type = "info") {
   existingNotifications.forEach((n) => n.remove());
 
   const notification = document.createElement("div");
-  notification.className = `notification ${type}`;
+  notification.className = notification ${type};
   notification.textContent = message;
   document.body.appendChild(notification);
 
