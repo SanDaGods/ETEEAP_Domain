@@ -241,4 +241,4 @@ const dynamicStyles = `
 `;
 const styleElement = document.createElement("style");
 styleElement.textContent = dynamicStyles;
-document.head.appendChild(styleElement);
+document.head.appendChild(styleElement)
