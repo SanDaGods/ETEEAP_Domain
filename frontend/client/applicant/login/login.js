@@ -37,21 +37,21 @@ document.addEventListener("DOMContentLoaded", () => {
     resetInputs();
   };
 
+  // Event listeners for form toggle links
   buttons.registerLink?.addEventListener("click", (e) => {
     e.preventDefault();
     showForm("active");
   });
-
   buttons.loginLink?.addEventListener("click", (e) => {
     e.preventDefault();
     showForm("");
   });
-
   buttons.forgotLink?.addEventListener("click", (e) => {
     e.preventDefault();
     showForm("active-forgot");
   });
 
+  // Reset Password flow
   const resetForm = document.getElementById("resetForm");
   const verificationForm = document.getElementById("verificationForm");
   const newPasswordForm = document.getElementById("newPasswordForm");
@@ -63,6 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
     wrapper.classList.add("active-verification");
   });
 
+  // Verification code flow
   const verifyCodeForm = document.getElementById("verifyCodeForm");
   verifyCodeForm?.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -71,12 +72,13 @@ document.addEventListener("DOMContentLoaded", () => {
     wrapper.classList.add("active-new-password");
   });
 
+  // New password submission
   const newPasswordSubmit = document.getElementById("newPasswordSubmit");
   newPasswordSubmit?.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const newPassword = document.getElementById("newPassword").value;
-    const confirmPassword = document.getElementById("newConfirmPassword").value;
+    const newPassword = document.getElementById("newpassword").value;
+    const confirmPassword = document.getElementById("confirmNewPassword").value;
 
     if (newPassword !== confirmPassword) {
       showNotification("Passwords do not match. Please try again.");
@@ -87,11 +89,11 @@ document.addEventListener("DOMContentLoaded", () => {
     showForm("");
   });
 
+  // Toggle password visibility
   document.querySelectorAll(".toggle-password").forEach((toggle) => {
     toggle.addEventListener("click", () => {
       const input = toggle.parentElement.querySelector("input");
       const icon = toggle.querySelector("ion-icon");
-
       if (input.type === "password") {
         input.type = "text";
         icon.setAttribute("name", "eye");
@@ -102,25 +104,23 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  document.getElementById("terms-link")?.addEventListener("click", function (event) {
+  // Terms & Conditions link
+  document.getElementById("terms-link")?.addEventListener("click", (event) => {
     event.preventDefault();
     document.getElementById("terms-con").style.display = "block";
   });
-
-  document.getElementById("accept-btn")?.addEventListener("click", function () {
+  // Accept terms button
+  document.getElementById("accept-btn")?.addEventListener("click", () => {
     document.getElementById("terms-con").style.display = "none";
     document.getElementById("terms-checkbox").checked = true;
   });
 
+  // Close button
   buttons.close?.addEventListener("click", () => {
     resetInputs();
-    wrapper?.classList.remove(
-      "active-popup",
-      "active",
-      "active-forgot",
-      "active-verification",
-      "active-new-password"
-    );
+    document.querySelectorAll(
+      ".active, .active-forgot, .active-verification, .active-new-password"
+    ).forEach((cl) => cl.classList.remove(cl));
     window.location.href = "https://eteeap-domain-new.vercel.app/index.html";
   });
 
@@ -130,7 +130,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("registerForm")?.addEventListener("submit", async (event) => {
     event.preventDefault();
     console.log("Register form submitted");
-
     const email = document.getElementById("regEmail").value.trim().toLowerCase();
     const password = document.getElementById("regPassword").value;
     const confirmPassword = document.getElementById("regConfirmPassword").value;
@@ -139,17 +138,14 @@ document.addEventListener("DOMContentLoaded", () => {
       showNotification("Please fill in all fields");
       return;
     }
-
     if (!email.includes("@") || !email.includes(".")) {
       showNotification("Please enter a valid email address (e.g., user@example.com)");
       return;
     }
-
     if (password !== confirmPassword) {
       showNotification("Passwords do not match!");
       return;
     }
-
     if (password.length < 8) {
       showNotification("Password must be at least 8 characters");
       return;
@@ -166,7 +162,6 @@ document.addEventListener("DOMContentLoaded", () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-
       const contentType = response.headers.get("content-type");
       const isJson = contentType && contentType.includes("application/json");
       const responseBody = isJson ? await response.json() : await response.text();
@@ -194,7 +189,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Login
   document.getElementById("loginForm")?.addEventListener("submit", async (event) => {
     event.preventDefault();
-
     const email = document.getElementById("loginEmail").value.trim().toLowerCase();
     const password = document.getElementById("loginPassword").value;
 
@@ -215,7 +209,6 @@ document.addEventListener("DOMContentLoaded", () => {
         body: JSON.stringify({ email, password }),
         credentials: "include",
       });
-
       const contentType = response.headers.get("content-type") || "";
       const isJson = contentType.includes("application/json");
       const responseBody = isJson ? await response.json() : await response.text();
@@ -241,15 +234,19 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+// Notification function
 function showNotification(message, type = "info") {
-  const existingNotifications = document.querySelectorAll(".notification");
-  existingNotifications.forEach((n) => n.remove());
+  // Remove existing notifications
+  document.querySelectorAll(".notification").forEach((n) => n.remove());
 
+  // Create new notification
   const notification = document.createElement("div");
   notification.className = `notification ${type}`;
   notification.textContent = message;
+  // Append to body
   document.body.appendChild(notification);
 
+  // Animate fade out
   setTimeout(() => {
     notification.style.opacity = "0";
     setTimeout(() => notification.remove(), 500);
