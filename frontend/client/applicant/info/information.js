@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const BACKEND_URL =
-    import.meta.env.VITE_BACKEND_URL || "https://eteeapbackend-production.up.railway.app";
+const BACKEND_URL = "https://eteeapbackend-production.up.railway.app";
 
   function showAlert(message, type = "info") {
     const alertBox = document.createElement("div");
