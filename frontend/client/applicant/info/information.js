@@ -136,7 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       try {
         // ✅ FIXED: Correct backend route
-        const response = await fetch(`${BACKEND_URL}/frontend/client/applicant/api/update-personal-info`, {
+        const response = await fetch(`${BACKEND_URL}/applicants/api/update-personal-info`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ userId, personalInfo }),
