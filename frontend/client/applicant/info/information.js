@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-const BACKEND_URL = "https://eteeapbackend-production.up.railway.app";
+  const BACKEND_URL = "https://eteeapbackend-production.up.railway.app";
 
   function showAlert(message, type = "info") {
     const alertBox = document.createElement("div");
@@ -135,7 +135,8 @@ const BACKEND_URL = "https://eteeapbackend-production.up.railway.app";
       submitButton.innerHTML = '<span class="spinner"></span> Next Page';
 
       try {
-        const response = await fetch(`${BACKEND_URL}/api/update-personal-info`, {
+        // ✅ FIXED: Correct backend route
+        const response = await fetch(`${BACKEND_URL}/applicants/api/update-personal-info`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ userId, personalInfo }),
@@ -154,7 +155,6 @@ const BACKEND_URL = "https://eteeapbackend-production.up.railway.app";
 
         showAlert("Information submitted successfully!", "success");
 
-        // ✅ Redirect to filesubmission.html in same directory
         setTimeout(() => {
           window.location.href = "https://eteeap-domain-new.vercel.app/frontend/client/applicant/info/filesubmission.html";
         }, 1500);
@@ -204,7 +204,7 @@ const BACKEND_URL = "https://eteeapbackend-production.up.railway.app";
   }
 });
 
-// CSS injection
+// Inject CSS
 const dynamicStyles = `
   .alert {
       position: fixed;
